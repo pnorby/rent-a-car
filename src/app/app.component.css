@@ -1,0 +1,77 @@
+/*  StyleSheet for about the developer page*/
+
+header, footer, nav, section, article, aside {
+    display: block;   
+}
+
+body, html {
+height: 100%;
+}
+.bg { 
+/* The image used */
+
+
+/* Full height */
+height: 100%; 
+
+/* Center and scale the image nicely */
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+}
+h1 {
+font-family: "Georgia", Times, serif;
+font-size: 32pt;
+}
+#aboutTextBox {
+float: right;
+background: none;
+}
+
+#aboutMe {
+border: solid white 2px;
+border-radius: 10px;
+background-color: #0e1942;
+float: right;
+color: white;
+margin-right: 1em;
+margin-top: 1em;
+margin-left: 1em;
+padding: 1em;
+opacity: .8;
+}
+
+p {
+font-size: 14pt;
+}
+
+#portfolioPicture {
+display: none;
+}
+@media screen and (max-width: 766px){
+.bg {
+    background-image: none;
+    background-color: #2f395d;
+    background-repeat: repeat;
+    background-size: cover;
+}
+h1 {
+    font-size: 28pt;
+}
+#aboutTextBox {
+    float: left;
+    background-color: #2f395d; 
+}
+
+#aboutMe {
+border: solid white 2px;
+border-radius: 10px;
+background-color: #2f395d; 
+color: white;
+margin: auto;
+}
+#portfolioPicture {
+    display: block;
+    width: 100%;
+}
+}

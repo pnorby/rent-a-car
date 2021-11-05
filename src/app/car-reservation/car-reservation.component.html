@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-9"
+            *ngIf="selectedCar == undefined"
+        >
+            <h2>Placeholder for default car</h2>
+            
+            <h2>Display list on right side</h2>
+            <h2>default first car to left side</h2>
+            <h2>selected car to left side</h2>
+            <h2>Reserve car button</h2>
+            <h2>Removes from right side list</h2>
+            <h2>Adds to reservation list somewhere</h2>
+            <h2>left side defaults to first car in list</h2>
+            <h2>Add cancellation button</h2>
+            <h2>Returns car to list</h2>
+            <h2>Removes from reservations</h2>
+
+            <div class="card">
+                <div class="card-header">
+
+                </div>
+                <div class="card-body">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9"
+            *ngIf="selectedCar != undefined"
+        >
+        <h2>Reserve This Car</h2>
+            <div class="card">
+                <div class="card-header">
+                    {{selectedCar.title}}
+                </div>
+                <div class="card-body">
+                    <div><img src={{selectedCar.visual}} alt="image"></div>
+                    {{selectedCar.description}}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h2>Cars Available</h2>
+            <div class="card">
+                <div class="list-group list-group-flush">
+                  <button 
+                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                    *ngFor="let c of availableCars"
+                    (click)="selectCar(c)"                    
+                  >
+                    {{ c.title }}
+                  </button>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
