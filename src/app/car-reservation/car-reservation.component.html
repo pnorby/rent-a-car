@@ -16,7 +16,10 @@
         >
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    {{selectedCar.year}} {{selectedCar.make}} {{selectedCar.model}}
+                    <p>{{selectedCar.year}} {{selectedCar.make}} {{selectedCar.model}}</p>
+                    <button class="btn btn-primary"
+                (click)="reserveCar()"
+              >Reserve</button>
                 </div>
                 <div class="card-body">
                     <div><img src={{selectedCar.visual}} alt="image"></div>
@@ -43,22 +46,18 @@
                 </div>
               </div>
               <br />
-              <div class="text-center">
-              <button class="btn btn-primary"
-                (click)="reserveCar()"
-              >Reserve</button>
-              </div>
               <br />
               <h2>My Reservations</h2>
               <div class="alert alert-danger"
                role="alert"
                *ngIf="maxRentalsReached == true">
-Maximum Rentals Reached</div>
+                    Maximum Rentals Reached
+            </div>
               
               <div class="card">
                 <div class="list-group list-group-flush">
                   <button 
-                    class="list-group-item list-group-item-action"
+                    class="list-group-item list-group-item-action "
                     *ngFor="let c of rentedCars"
                     (click)="unReserve(c)"                    
                   >
