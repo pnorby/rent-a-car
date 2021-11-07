@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CarService } from '../car.service';
 
 interface CarDisplay {
+  id: Number;
   title: string;
   visual: string;
   description: string;
@@ -19,24 +20,41 @@ export class CarReservationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const cars = this.carSvc.loadCars();
-    this.availableCars = cars.map(x =>({
+    this.allCars = this.carSvc.loadCars();
+    this.availableCars = this.allCars.map((x:any) =>({
+      id: x.id,
       title: x.year + " " + x.make + " " + x.model,
       description: x.description,
-      visual:x.visual
-      
+      available:true     
     }))
     
-    console.log(cars);
-
-    this.selectedCar = this.availableCars[0];
+    this.selectedCar = this.allCars[0];
   }
-
-  selectedCar: CarDisplay | undefined = undefined;
-
+  
+  allCars: any = [];
+  rentedCars: CarDisplay[] = [];
+  selectedCar: any;
   availableCars: CarDisplay[] = [];
 
   selectCar = (c: CarDisplay) => {
-    this.selectedCar = c;
+    this.selectedCar = this.allCars.filter((x: any) => x.id == c.id)[0];
   } 
+
+  reserveCar = () => {
+    
+    this.rentedCars = [
+      ...this.rentedCars,
+      this.availableCars.filter(x => x.id == this.selectedCar.id)[0]
+    ];
+
+    this.availableCars = this.availableCars.filter(x => x.id != this.selectedCar.id); 
+    this.selectedCar = this.allCars.filter((x:any) => x.id == this.availableCars[0].id)[0];
+  
+    
+  }
+
+  unReserve = (c: CarDisplay) => {
+    this.availableCars = this.availableCars = this.rentedCars.filter(x => x == this.selectedCar.id);
+    this.rentedCars = this.rentedCars.filter(x => x.id != c.id);
+  }
 }

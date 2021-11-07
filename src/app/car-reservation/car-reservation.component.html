@@ -14,13 +14,17 @@
         <div class="col-md-9"
             *ngIf="selectedCar != undefined"
         >
-        <h2>Reserve This Car</h2>
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    {{selectedCar.title}}
+                    {{selectedCar.year}} {{selectedCar.make}} {{selectedCar.model}}
                 </div>
                 <div class="card-body">
                     <div><img src={{selectedCar.visual}} alt="image"></div>
+                    <p>Year: {{selectedCar.year}}</p>
+                    <p>Make: {{selectedCar.make}}</p>
+                    <p>Model: {{selectedCar.model}}</p>
+                    <p>Mileage: {{selectedCar.mileage}}</p>
+                    <p>Price: ${{selectedCar.price}}</p>
                     {{selectedCar.description}}
                 </div>
             </div>
@@ -38,16 +42,25 @@
                   </button>
                 </div>
               </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Reserve</h2>
-           
-        </div>
-        <div class="col-md-8">
-
+              <br />
+              <div class="text-center">
+              <button class="btn btn-primary"
+                (click)="reserveCar()"
+              >Reserve</button>
+              </div>
+              <br />
+              <h2>My Reservations</h2>
+              <div class="card">
+                <div class="list-group list-group-flush">
+                  <button 
+                    class="list-group-item list-group-item-action"
+                    *ngFor="let c of rentedCars"
+                    (click)="unReserve(c)"                    
+                  >
+                    {{ c.title }}
+                  </button>
+                </div>
+              </div>
         </div>
     </div>
 </div>

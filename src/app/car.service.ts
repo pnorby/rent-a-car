@@ -8,8 +8,9 @@ export class CarService {
   constructor() { }
 
   loadCars = () =>{
-    const cars: any[] = [
+    const cars = [
       {
+        id:1,
         year:'2020',
         color:'blue',
         make:'Ford',
@@ -21,6 +22,7 @@ export class CarService {
       }
       ,
       {
+        id:2,
         year:'2021',
         color:'red',
         make:'Chevrolet',
@@ -32,6 +34,7 @@ export class CarService {
       }
       ,
       {
+        id:3,
         year:'2020',
         color:'green',
         make:'Ford',
@@ -43,6 +46,7 @@ export class CarService {
       }
       ,
       {
+        id:4,
         year:'2019',
         color:'orange',
         make:'Chevrolet',
@@ -53,6 +57,7 @@ export class CarService {
         visual:'/assets/img/orangecar.png'
       },
       {
+        id:5,
         year:'2020',
         color:'yellow',
         make:'Ford',
