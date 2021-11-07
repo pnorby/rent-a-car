@@ -3,9 +3,15 @@ import { CarService } from '../car.service';
 
 interface CarDisplay {
   id: Number;
+  year: string;
+  make: string;
+  model: string;
   title: string;
+  mileage: string;
+  price: Number;
   visual: string;
   description: string;
+  available: boolean;
 }
 
 @Component({
@@ -17,47 +23,51 @@ export class CarReservationComponent implements OnInit {
 
   constructor(
     public carSvc: CarService
+    
   ) { }
 
   ngOnInit(): void {
-    this.allCars = this.carSvc.loadCars();
-    this.availableCars = this.allCars.map((x:any) =>({
-      id: x.id,
+    const allCars = this.carSvc.loadCars();
+    this.cars = allCars.map((x:any) =>({
+      ...x,
       title: x.year + " " + x.make + " " + x.model,
-      description: x.description,
       available:true     
     }))
     
-    this.selectedCar = this.allCars[0];
+    this.selectedCar = this.cars[0];
   }
   maxRentalsReached = false;
-  allCars: any = [];
   rentedCars: CarDisplay[] = [];
-  selectedCar: any;
-  availableCars: CarDisplay[] = [];
+
+  selectedCar: CarDisplay = {
+    id:0,
+    price: 0,
+    make: 'default',
+    model: 'default',
+    mileage: 'default',
+    year: 'default',
+    title:'default',
+    visual:'default',
+    description:'default',
+    available:true
+  };
+  cars: CarDisplay[] = [];
 
   selectCar = (c: CarDisplay) => {
-    this.selectedCar = this.allCars.filter((x: any) => x.id == c.id)[0];
+    this.selectedCar = c;
   } 
 
   reserveCar = () => {
-    if(this.rentedCars.length < 3){
-    this.rentedCars = [
-      ...this.rentedCars,
-      this.availableCars.filter(x => x.id == this.selectedCar.id)[0]
-    ];
-
-    this.availableCars = this.availableCars.filter(x => x.id != this.selectedCar.id); 
-    this.selectedCar = this.allCars.filter((x:any) => x.id == this.availableCars[0].id)[0];
-  }
-  else{
-    this.maxRentalsReached = true;
-  }
-    
+   if(this.cars.filter(x => x.available == false).length < 3){
+      this.cars.filter(x => x.id == this.selectedCar.id)[0].available = false;
+   }
+   else{
+     this.maxRentalsReached = true;
+   }
   }
 
-  unReserve = (c: CarDisplay) => {
-    this.availableCars = this.availableCars = this.rentedCars.filter(x => x == this.selectedCar.id);
-    this.rentedCars = this.rentedCars.filter(x => x.id != c.id);
+  unReserve = () => {
+    this.cars.filter(x => x.id == this.selectedCar.id)[0].available = true;
+    this.maxRentalsReached = false;
   }
 }
