@@ -50,6 +50,11 @@
               </div>
               <br />
               <h2>My Reservations</h2>
+              <div class="alert alert-danger"
+               role="alert"
+               *ngIf="maxRentalsReached == true">
+Maximum Rentals Reached</div>
+              
               <div class="card">
                 <div class="list-group list-group-flush">
                   <button 

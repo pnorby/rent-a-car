@@ -30,7 +30,7 @@ export class CarReservationComponent implements OnInit {
     
     this.selectedCar = this.allCars[0];
   }
-  
+  maxRentalsReached = false;
   allCars: any = [];
   rentedCars: CarDisplay[] = [];
   selectedCar: any;
@@ -41,7 +41,7 @@ export class CarReservationComponent implements OnInit {
   } 
 
   reserveCar = () => {
-    
+    if(this.rentedCars.length < 3){
     this.rentedCars = [
       ...this.rentedCars,
       this.availableCars.filter(x => x.id == this.selectedCar.id)[0]
@@ -49,7 +49,10 @@ export class CarReservationComponent implements OnInit {
 
     this.availableCars = this.availableCars.filter(x => x.id != this.selectedCar.id); 
     this.selectedCar = this.allCars.filter((x:any) => x.id == this.availableCars[0].id)[0];
-  
+  }
+  else{
+    this.maxRentalsReached = true;
+  }
     
   }
 
