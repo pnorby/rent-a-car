@@ -18,7 +18,7 @@ export class CarService {
         mileage:10000,
         price:40,
         description:'This car is excellent!',
-        visual:'../assets/img/bluecar.png'
+        visual:'/rent-a-car/assets/img/bluecar.png'
       }
       ,
       {
