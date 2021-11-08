@@ -18,7 +18,7 @@ export class CarService {
         mileage:10000,
         price:40,
         description:'This car is excellent!',
-        visual:'/rent-a-car/assets/img/bluecar.png'
+        visual:'../assets/img/bluecar.png'
       }
       ,
       {
@@ -30,7 +30,7 @@ export class CarService {
         mileage:20000,
         price:45,
         description:'This car is awesome!',
-        visual:'/rent-a-car/assets/img/redcar.png'
+        visual:'../assets/img/redcar.png'
       }
       ,
       {
@@ -42,7 +42,7 @@ export class CarService {
         mileage:14500,
         price:50,
         description:'This car is amazing!',
-        visual:'/rent-a-car/assets/img/greencar.png'
+        visual:'../assets/img/greencar.png'
       }
       ,
       {
@@ -54,7 +54,7 @@ export class CarService {
         mileage:10000,
         price:38,
         description:'This car is phenomenal!',
-        visual:'/rent-a-car/assets/img/orangecar.png'
+        visual:'../assets/img/orangecar.png'
       },
       {
         id:5,
@@ -65,7 +65,7 @@ export class CarService {
         mileage:15000,
         price:35,
         description:'This car is fantastic!',
-        visual:'/rent-a-car/assets/img/yellowcar.png'
+        visual:'../assets/img/yellowcar.png'
       }
     ];
 
