@@ -16,14 +16,14 @@
         >
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <p>{{selectedCar.year}} {{selectedCar.make}} {{selectedCar.model}}</p>                               
+                    <h2>{{selectedCar.year}} {{selectedCar.make}} {{selectedCar.model}}</h2>                               
                 </div>
                 <div class="card-body">
                     <div><img src={{selectedCar.visual}} alt="image" style="max-width:100%; max-height: 100%;"/></div>
                     <br />
                     <div class="row">
-                    <div class="col-md-5 col-sm-12">
-                        <h2>Vehicle Info</h2>
+                    <div class="col-md-6 col-sm-12">
+                        <h3>Vehicle Info</h3>
                         <p><b>Year:</b> {{selectedCar.year}}</p>
                         <p><b>Make:</b> {{selectedCar.make}}</p>
                         <p><b>Model:</b> {{selectedCar.model}}</p>
@@ -31,27 +31,31 @@
                         <p><b>Price: </b> ${{selectedCar.price}}</p>
                         <p><b>Description:</b> {{selectedCar.description}}</p>
                     </div>
-                    <div class="col-md-7 col-sm-12 text-left">
-                        <h2>Reservation Details</h2>
+                    <div class="col-md-6 col-sm-12 text-left">
+                        <h3>Reservation Details</h3>
                         <label>From:
-                        <input class="form-control" matInput [matDatepicker]="fromPicker">
+                        <input class="form-control"
+                         matInput [matDatepicker]="fromPicker"
+                         [(ngModel)]="currentReservation.from">
                         </label>
                         <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
                         <mat-datepicker #fromPicker></mat-datepicker>
                         <br />
                         <label>To:
-                            <input class="form-control" matInput [matDatepicker]="toPicker">
+                            <input class="form-control"
+                             matInput [matDatepicker]="toPicker"
+                             [(ngModel)]="currentReservation.to">
                             </label>
                             <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
                             <mat-datepicker #toPicker></mat-datepicker>
                         <p>Price: </p>
                         <button class="btn btn-primary"
-                    *ngIf="selectedCar.available == true"
+                    *ngIf="currentReservation == undefined"
                 (click)="reserveCar()"                
                     >Reserve</button>
 
                     <button class="btn btn-primary"
-                    *ngIf="selectedCar.available == false"
+                    *ngIf="currentReservation != undefined"
                     (click)="unReserve()"
                     >UnReserve</button>
                     </div>
@@ -91,14 +95,13 @@
               <div class="card">
                 <div class="list-group list-group-flush">                  
                       <div
-                      *ngFor="let c of cars"
+                      *ngFor="let r of rentedCars"
                       >
                       <button 
                   class="list-group-item list-group-item-action "
-                  *ngIf="c.available == false"
-                  (click)="selectCar(c)"
+                  
+                  (click)="selectReservation(r)"
                 >
-                  {{ c.title }}
                 </button>                
                 </div>
               </div>

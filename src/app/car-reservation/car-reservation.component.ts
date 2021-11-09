@@ -1,3 +1,4 @@
+import { NodeWithI18n } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { CarService } from '../car.service';
 
@@ -12,6 +13,13 @@ interface CarDisplay {
   visual: string;
   description: string;
   available: boolean;
+}
+
+interface ReservationDisplay {
+  car: CarDisplay;
+  from: string;
+  to: string;
+  fee: Number;
 }
 
 @Component({
@@ -35,9 +43,11 @@ export class CarReservationComponent implements OnInit {
     }))
     
     this.selectedCar = this.cars[0];
+    this.currentReservation = {car:this.selectedCar, from: '', to: '', fee: 0 };
   }
+  currentReservation: ReservationDisplay | undefined;
   maxRentalsReached = false;
-  rentedCars: CarDisplay[] = [];
+  rentedCars: ReservationDisplay[] = [];
 
   selectedCar: CarDisplay = {
     id:0,
@@ -55,11 +65,25 @@ export class CarReservationComponent implements OnInit {
 
   selectCar = (c: CarDisplay) => {
     this.selectedCar = c;
+    this.currentReservation = undefined;
   } 
 
+  selectReservation = (r: ReservationDisplay) => {
+      this.selectedCar = r.car;
+      this.currentReservation = r;
+  }
+
   reserveCar = () => {
-   if(this.cars.filter(x => x.available == false).length < 3){
-      this.cars.filter(x => x.id == this.selectedCar.id)[0].available = false;
+   if(this.rentedCars.length < 3) {
+      this.selectedCar.available = false;  
+    
+      if(this.currentReservation){
+        this.rentedCars = [
+          ...this.rentedCars
+          , this.currentReservation
+        ]
+      }
+      
    }
    else{
      this.maxRentalsReached = true;
