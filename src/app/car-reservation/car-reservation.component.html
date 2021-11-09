@@ -20,17 +20,18 @@
                 </div>
                 <div class="card-body">
                     <div><img src={{selectedCar.visual}} alt="image" style="max-width:100%; max-height: 100%;"/></div>
+                    <br />
                     <div class="row">
-                    <div class="col-md-4 col-sm-12">
-                        <p>Year: {{selectedCar.year}}</p>
-                        <p>Make: {{selectedCar.make}}</p>
-                        <p>Model: {{selectedCar.model}}</p>
-                        <p>Mileage: {{selectedCar.mileage}}</p>
-                        <p>Price: ${{selectedCar.price}}</p>
-                        {{selectedCar.description}}
-                        <br />
+                    <div class="col-md-5 col-sm-12">
+                        <h2>Vehicle Info</h2>
+                        <p><b>Year:</b> {{selectedCar.year}}</p>
+                        <p><b>Make:</b> {{selectedCar.make}}</p>
+                        <p><b>Model:</b> {{selectedCar.model}}</p>
+                        <p><b>Mileage:</b> {{selectedCar.mileage}}</p>
+                        <p><b>Price: </b> ${{selectedCar.price}}</p>
+                        <p><b>Description:</b> {{selectedCar.description}}</p>
                     </div>
-                    <div class="col-md-8 col-sm-12 text-left">
+                    <div class="col-md-7 col-sm-12 text-left">
                         <h2>Reservation Details</h2>
                         <label>From:
                         <input class="form-control" matInput [matDatepicker]="fromPicker">
