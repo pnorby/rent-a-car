@@ -3,13 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { CarService } from '../car.service';
 
 interface CarDisplay {
-  id: Number;
+  id: number;
   year: string;
   make: string;
   model: string;
   title: string;
   mileage: string;
-  price: Number;
+  price: number;
   visual: string;
   description: string;
   available: boolean;
@@ -19,7 +19,8 @@ interface ReservationDisplay {
   car: CarDisplay;
   from: string;
   to: string;
-  fee: Number;
+  fee: number;
+  complete: boolean;
 }
 
 @Component({
@@ -43,10 +44,11 @@ export class CarReservationComponent implements OnInit {
     }))
     
     this.selectedCar = this.cars[0];
-    this.currentReservation = {car:this.selectedCar, from: '', to: '', fee: 0 };
+    this.currentReservation.car = this.selectedCar;
   }
-  currentReservation: ReservationDisplay | undefined;
+  
   maxRentalsReached = false;
+
   rentedCars: ReservationDisplay[] = [];
 
   selectedCar: CarDisplay = {
@@ -61,37 +63,64 @@ export class CarReservationComponent implements OnInit {
     description:'default',
     available:true
   };
+
+  currentReservation: ReservationDisplay = {
+    car: this.selectedCar,
+    to: '',
+    from:'',
+    fee: 0,
+    complete: false
+  };
+
   cars: CarDisplay[] = [];
 
   selectCar = (c: CarDisplay) => {
     this.selectedCar = c;
-    this.currentReservation = undefined;
-  } 
+      this.currentReservation.car = c;
+      this.currentReservation.to = "";
+      this.currentReservation.from = "";
+      this.currentReservation.fee = c.price;
+      this.currentReservation.complete = false;
+    
+   }
 
   selectReservation = (r: ReservationDisplay) => {
       this.selectedCar = r.car;
       this.currentReservation = r;
   }
+  
+  toDateChanged = ($event: any) => {
+    var d = new Date($event.target.value);
+    this.currentReservation.to = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()     
+  }
+
+  fromDateChanged = ($event: any) => {
+    var d = new Date($event.target.value);
+    this.currentReservation.from = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()  
+  }
 
   reserveCar = () => {
-   if(this.rentedCars.length < 3) {
-      this.selectedCar.available = false;  
-    
-      if(this.currentReservation){
-        this.rentedCars = [
-          ...this.rentedCars
-          , this.currentReservation
-        ]
-      }
-      
+   this.currentReservation.fee = this.selectedCar.price * 3;
+
+    if(this.rentedCars.length < 3) {
+      this.selectedCar.available = false;
+      this.currentReservation.complete = true;  
+     console.log(this.currentReservation);
+      this.rentedCars = [
+        ...this.rentedCars
+        , this.currentReservation
+      ]
+
    }
    else{
      this.maxRentalsReached = true;
-   }
+    }
   }
 
   unReserve = () => {
-    this.cars.filter(x => x.id == this.selectedCar.id)[0].available = true;
+    this.cars.filter(x => x == this.selectedCar)[0].available = true;
     this.maxRentalsReached = false;
+    this.currentReservation.complete = false;
+    this.rentedCars = this.rentedCars.filter(x => x.car !== this.selectedCar);
   }
 }

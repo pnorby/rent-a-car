@@ -15,8 +15,8 @@
             *ngIf="selectedCar != undefined"
         >
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h2>{{selectedCar.year}} {{selectedCar.make}} {{selectedCar.model}}</h2>                               
+                <div class="card-header">
+                    <h2>{{selectedCar.title}}</h2>                               
                 </div>
                 <div class="card-body">
                     <div><img src={{selectedCar.visual}} alt="image" style="max-width:100%; max-height: 100%;"/></div>
@@ -28,34 +28,36 @@
                         <p><b>Make:</b> {{selectedCar.make}}</p>
                         <p><b>Model:</b> {{selectedCar.model}}</p>
                         <p><b>Mileage:</b> {{selectedCar.mileage}}</p>
-                        <p><b>Price: </b> ${{selectedCar.price}}</p>
+                        <p><b>Price: </b> ${{selectedCar.price}} / day</p>
                         <p><b>Description:</b> {{selectedCar.description}}</p>
                     </div>
-                    <div class="col-md-6 col-sm-12 text-left">
+                    <div class="col-md-6 col-sm-12 text-left"
+                    *ngIf="currentReservation !== undefined">
                         <h3>Reservation Details</h3>
                         <label>From:
-                        <input class="form-control"
+                        <input class="form-control" placeholder=""
                          matInput [matDatepicker]="fromPicker"
-                         [(ngModel)]="currentReservation.from">
+                          (dateChange)="fromDateChanged($event)"
+                         >
                         </label>
                         <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
                         <mat-datepicker #fromPicker></mat-datepicker>
                         <br />
                         <label>To:
-                            <input class="form-control"
-                             matInput [matDatepicker]="toPicker"
-                             [(ngModel)]="currentReservation.to">
+                            <input class="form-control" placeholder=""
+                             matInput [matDatepicker]="toPicker" (dateChange)="toDateChanged($event)"
+                             >
                             </label>
                             <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
                             <mat-datepicker #toPicker></mat-datepicker>
                         <p>Price: </p>
                         <button class="btn btn-primary"
-                    *ngIf="currentReservation == undefined"
+                    *ngIf="currentReservation.complete == false"
                 (click)="reserveCar()"                
                     >Reserve</button>
 
                     <button class="btn btn-primary"
-                    *ngIf="currentReservation != undefined"
+                    *ngIf="currentReservation.complete == true"
                     (click)="unReserve()"
                     >UnReserve</button>
                     </div>
@@ -64,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 text-center">
             <h2>Cars Available</h2>
             
             <div class="card">
@@ -92,19 +94,18 @@
                     Maximum Rentals Reached
             </div>
               
-              <div class="card">
-                <div class="list-group list-group-flush">                  
-                      <div
-                      *ngFor="let r of rentedCars"
-                      >
-                      <button 
-                  class="list-group-item list-group-item-action "
-                  
-                  (click)="selectReservation(r)"
-                >
-                </button>                
+              <div class="card"
+              *ngFor="let r of rentedCars"
+              (click)="selectReservation(r)"
+              >
+                <div class="card-header text-center">
+                    <p>{{currentReservation.car.title}}</p>                    
                 </div>
-              </div>
+                <div class="card-body">
+                    <p>{{currentReservation.from}} - {{currentReservation.to}}</p>                    
+                    <p>Fee: {{currentReservation.fee}}</p>
+                </div>
+            </div>         
         </div>
     </div>
 </div>
