@@ -93,19 +93,22 @@
                *ngIf="maxRentalsReached == true">
                     Maximum Rentals Reached
             </div>
-              
-              <div class="card"
+              <div
               *ngFor="let r of rentedCars"
+              >
+              <div class="card"
               (click)="selectReservation(r)"
               >
                 <div class="card-header text-center">
-                    <p>{{currentReservation.car.title}}</p>                    
+                    <p>{{r.car.title}}</p>                    
                 </div>
                 <div class="card-body">
-                    <p>{{currentReservation.from}} - {{currentReservation.to}}</p>                    
-                    <p>Fee: {{currentReservation.fee}}</p>
+                    <p>{{r.from}} - {{r.to}}</p>                    
+                    <p>Fee: {{r.fee}}</p>
                 </div>
-            </div>         
+            </div>
+            <br/>         
+            </div>
         </div>
     </div>
 </div>

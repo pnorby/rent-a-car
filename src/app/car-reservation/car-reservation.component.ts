@@ -1,5 +1,6 @@
 import { NodeWithI18n } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import { CarService } from '../car.service';
 
 interface CarDisplay {
@@ -44,72 +45,78 @@ export class CarReservationComponent implements OnInit {
     }))
     
     this.selectedCar = this.cars[0];
-    this.currentReservation.car = this.selectedCar;
+    this.currentReservation = {
+    car: {...this.selectedCar},
+    from:'',
+    to:'',
+    fee:0,
+    complete:false
+
+    }
   }
   
   maxRentalsReached = false;
 
   rentedCars: ReservationDisplay[] = [];
 
-  selectedCar: CarDisplay = {
-    id:0,
-    price: 0,
-    make: 'default',
-    model: 'default',
-    mileage: 'default',
-    year: 'default',
-    title:'default',
-    visual:'default',
-    description:'default',
-    available:true
-  };
-
-  currentReservation: ReservationDisplay = {
-    car: this.selectedCar,
-    to: '',
-    from:'',
-    fee: 0,
-    complete: false
-  };
+  selectedCar: CarDisplay | undefined = undefined;
+  currentFrom = '';
+  currentTo = '';
+  
+  currentReservation: ReservationDisplay | undefined = undefined;
 
   cars: CarDisplay[] = [];
 
   selectCar = (c: CarDisplay) => {
-    this.selectedCar = c;
-      this.currentReservation.car = c;
-      this.currentReservation.to = "";
-      this.currentReservation.from = "";
-      this.currentReservation.fee = c.price;
-      this.currentReservation.complete = false;
-    
+  this.selectedCar = c;
+  this.currentReservation = {
+    car: {...this.selectedCar},
+    from: this.currentFrom,
+    to: this.currentTo,
+    fee: 0,
+    complete: false
+    }
    }
 
   selectReservation = (r: ReservationDisplay) => {
-      this.selectedCar = r.car;
+      this.selectedCar = this.cars.filter(x => x.id == r.car.id)[0];
       this.currentReservation = r;
   }
   
   toDateChanged = ($event: any) => {
     var d = new Date($event.target.value);
-    this.currentReservation.to = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()     
+    this.currentTo = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()     
   }
 
   fromDateChanged = ($event: any) => {
     var d = new Date($event.target.value);
-    this.currentReservation.from = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()  
+    this.currentFrom = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()  
   }
 
   reserveCar = () => {
-   this.currentReservation.fee = this.selectedCar.price * 3;
+   const theCharge = this.selectedCar == undefined? 0 : this.selectedCar.price * 3;
 
     if(this.rentedCars.length < 3) {
-      this.selectedCar.available = false;
-      this.currentReservation.complete = true;  
-     console.log(this.currentReservation);
+      if(this.selectedCar){
+        this.selectedCar.available = false;
+
+        this.currentReservation = {
+          car: {...this.selectedCar},
+          from: this.currentFrom,
+          to: this.currentTo,
+          fee:theCharge,
+          complete:true     
+          }
+      }
+
+     if(this.rentedCars && this.currentReservation){
+
       this.rentedCars = [
         ...this.rentedCars
         , this.currentReservation
-      ]
+      ];
+
+     } 
 
    }
    else{
@@ -120,7 +127,12 @@ export class CarReservationComponent implements OnInit {
   unReserve = () => {
     this.cars.filter(x => x == this.selectedCar)[0].available = true;
     this.maxRentalsReached = false;
-    this.currentReservation.complete = false;
-    this.rentedCars = this.rentedCars.filter(x => x.car !== this.selectedCar);
+
+    if(this.currentReservation){
+      this.currentReservation.complete = false;      
+    }
+    const y = (this.selectedCar == undefined? 0 : this.selectedCar.id);
+    this.rentedCars = this.rentedCars.filter(x => x.car.id !== y);
+    
   }
 }
