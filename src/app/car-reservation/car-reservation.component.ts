@@ -45,6 +45,8 @@ export class CarReservationComponent implements OnInit {
     }))
     
     this.selectedCar = this.cars[0];
+    const d = new Date();
+    this. currentDay = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()
     this.currentReservation = {
     car: {...this.selectedCar},
     from:'',
@@ -54,7 +56,7 @@ export class CarReservationComponent implements OnInit {
 
     }
   }
-  
+  currentDay = '';
   maxRentalsReached = false;
 
   rentedCars: ReservationDisplay[] = [];
@@ -68,19 +70,43 @@ export class CarReservationComponent implements OnInit {
   cars: CarDisplay[] = [];
 
   selectCar = (c: CarDisplay) => {
-  this.selectedCar = c;
+    const d = new Date();
+
+    this.selectedCar = c;
   this.currentReservation = {
     car: {...this.selectedCar},
-    from: this.currentFrom,
-    to: this.currentTo,
+    from: this.currentDay,
+    to: this.currentDay,
     fee: 0,
     complete: false
     }
+    const toDate = <HTMLInputElement>document.getElementById("toInput");
+    const fromDate = <HTMLInputElement>document.getElementById("fromInput");
+
+    if(toDate !== null){
+      toDate.value = this.currentReservation.to;
+    }
+    if(fromDate !== null){
+      fromDate.value = this.currentReservation.from;
+    }
+
    }
 
   selectReservation = (r: ReservationDisplay) => {
       this.selectedCar = this.cars.filter(x => x.id == r.car.id)[0];
       this.currentReservation = r;
+
+      const toDate = <HTMLInputElement>document.getElementById("toInput");
+      const fromDate = <HTMLInputElement>document.getElementById("fromInput");
+  
+
+    if(toDate !== null){
+      toDate.value = r.to;
+    }
+    if(fromDate !== null){
+      fromDate.value = r.from;
+    }
+
   }
   
   toDateChanged = ($event: any) => {
@@ -135,4 +161,6 @@ export class CarReservationComponent implements OnInit {
     this.rentedCars = this.rentedCars.filter(x => x.car.id !== y);
     
   }
+
+  
 }

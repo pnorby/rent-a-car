@@ -35,7 +35,9 @@
                     *ngIf="currentReservation !== undefined">
                         <h3>Reservation Details</h3>
                         <label>From:
-                        <input class="form-control" placeholder=""
+                        <input class="form-control"
+                        id="fromInput"
+                        type="text"
                          matInput [matDatepicker]="fromPicker"
                           (dateChange)="fromDateChanged($event)"
                          >
@@ -44,7 +46,9 @@
                         <mat-datepicker #fromPicker></mat-datepicker>
                         <br />
                         <label>To:
-                            <input class="form-control" placeholder=""
+                            <input class="form-control"
+                            id="toInput"
+                            type="text"
                              matInput [matDatepicker]="toPicker" (dateChange)="toDateChanged($event)"
                              >
                             </label>
