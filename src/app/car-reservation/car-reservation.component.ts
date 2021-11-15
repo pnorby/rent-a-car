@@ -45,7 +45,11 @@ export class CarReservationComponent implements OnInit {
     }))
     this.selectedCar = this.cars[0];
     const d = new Date();
-    this. currentDay = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()
+    this.currentDay = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()
+    this.currentTo = this.currentDay;
+    this.currentFrom = this.currentDay;
+    this.resetDatePickers( this.currentDay, this.currentDay);
+    
     this.currentReservation = {
     car: {...this.selectedCar},
     from:'',
@@ -55,11 +59,20 @@ export class CarReservationComponent implements OnInit {
 
     }
   }
+dateFrom = new FormControl(new Date());
+dateTo = new FormControl(new Date());
+
+  resetDatePickers = (from: string, to: string) => {
+    
+    this.dateFrom.setValue(new Date(from));
+    this.dateTo.setValue(new Date(to));
+    this.currentTo = this.currentDay;
+    this.currentFrom = this.currentDay;
+  }
+
   currentDay = '';
   maxRentalsReached = false;
-
   rentedCars: ReservationDisplay[] = [];
-
   selectedCar: CarDisplay | undefined = undefined;
   currentFrom = '';
   currentTo = '';
@@ -70,43 +83,25 @@ export class CarReservationComponent implements OnInit {
 
   selectCar = (c: CarDisplay) => {
     this.datesIncorrect = false;
-    const d = new Date();
+    this.resetDatePickers(this.currentDay, this.currentDay);    
 
     this.selectedCar = c;
-  this.currentReservation = {
+    this.currentReservation = {
     car: {...this.selectedCar},
     from: this.currentDay,
     to: this.currentDay,
     fee: 0,
     complete: false
-    }
-    const toDate = <HTMLInputElement>document.getElementById("toInput");
-    const fromDate = <HTMLInputElement>document.getElementById("fromInput");
-
-    if(toDate !== null){
-      toDate.value = this.currentReservation.to;
-    }
-    if(fromDate !== null){
-      fromDate.value = this.currentReservation.from;
-    }
+    }    
    }
 
   selectReservation = (r: ReservationDisplay) => {
-    this.datesIncorrect = false;  
+    this.datesIncorrect = false;
+  
     this.selectedCar = this.cars.filter(x => x.id == r.car.id)[0];
       this.currentReservation = r;
 
-      const toDate = <HTMLInputElement>document.getElementById("toInput");
-      const fromDate = <HTMLInputElement>document.getElementById("fromInput");
-  
-
-    if(toDate !== null){
-      toDate.value = r.to;
-    }
-    if(fromDate !== null){
-      fromDate.value = r.from;
-      
-    }
+      this.resetDatePickers(r.from, r.to);
 
   }
   
@@ -127,10 +122,6 @@ export class CarReservationComponent implements OnInit {
     const to = new Date(this.currentTo);
      const from = new Date(this.currentFrom);
 
-     console.log(thisDay);
-     console.log(from);
-     console.log(to);
-
      if(to < from || to < thisDay || from < thisDay){
        return false;
      }
@@ -149,10 +140,6 @@ export class CarReservationComponent implements OnInit {
       this.datesIncorrect = true;
       return;
     }
-
-  console.log("here");  
-  console.log(this.currentFrom);
-  console.log(this.currentTo);
 
   if(this.rentedCars.length < 3) {
       if(this.selectedCar){
