@@ -32,8 +32,9 @@
                         <p><b>Description:</b> {{selectedCar.description}}</p>
                     </div>
                     <div class="col-md-6 col-sm-12 text-left"
-                    *ngIf="currentReservation !== undefined">
-                        <h3>Reservation Details</h3>
+                    *ngIf="currentReservation !== undefined">  
+                    
+                    <h3>Reservation Details</h3>
                         <label>From:
                         <input class="form-control"
                         id="fromInput"
@@ -55,6 +56,11 @@
                             <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
                             <mat-datepicker #toPicker></mat-datepicker>
                         <p>Price: </p>
+                        <div class="alert alert-danger"
+                            role="alert"
+                            *ngIf="datesIncorrect == true">
+                            Not a valid date range
+                        </div>
                         <button class="btn btn-primary"
                     *ngIf="currentReservation.complete == false"
                 (click)="reserveCar()"                

@@ -2,6 +2,7 @@ import { NodeWithI18n } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import { CarService } from '../car.service';
+import {FormControl} from '@angular/forms';
 
 interface CarDisplay {
   id: number;
@@ -35,7 +36,6 @@ export class CarReservationComponent implements OnInit {
     public carSvc: CarService
     
   ) { }
-
   ngOnInit(): void {
     const allCars = this.carSvc.loadCars();
     this.cars = allCars.map((x:any) =>({
@@ -43,7 +43,6 @@ export class CarReservationComponent implements OnInit {
       title: x.year + " " + x.make + " " + x.model,
       available:true     
     }))
-    
     this.selectedCar = this.cars[0];
     const d = new Date();
     this. currentDay = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()
@@ -64,12 +63,13 @@ export class CarReservationComponent implements OnInit {
   selectedCar: CarDisplay | undefined = undefined;
   currentFrom = '';
   currentTo = '';
-  
+  datesIncorrect = false;
   currentReservation: ReservationDisplay | undefined = undefined;
 
   cars: CarDisplay[] = [];
 
   selectCar = (c: CarDisplay) => {
+    this.datesIncorrect = false;
     const d = new Date();
 
     this.selectedCar = c;
@@ -89,11 +89,11 @@ export class CarReservationComponent implements OnInit {
     if(fromDate !== null){
       fromDate.value = this.currentReservation.from;
     }
-
    }
 
   selectReservation = (r: ReservationDisplay) => {
-      this.selectedCar = this.cars.filter(x => x.id == r.car.id)[0];
+    this.datesIncorrect = false;  
+    this.selectedCar = this.cars.filter(x => x.id == r.car.id)[0];
       this.currentReservation = r;
 
       const toDate = <HTMLInputElement>document.getElementById("toInput");
@@ -105,6 +105,7 @@ export class CarReservationComponent implements OnInit {
     }
     if(fromDate !== null){
       fromDate.value = r.from;
+      
     }
 
   }
@@ -119,10 +120,41 @@ export class CarReservationComponent implements OnInit {
     this.currentFrom = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()  
   }
 
-  reserveCar = () => {
-   const theCharge = this.selectedCar == undefined? 0 : this.selectedCar.price * 3;
+  validDates = () => {
+    
+    var thisDay = new Date();
+    thisDay = new Date(thisDay.getMonth() + 1 + "/" + thisDay.getDate() + "/" + thisDay.getFullYear());
+    const to = new Date(this.currentTo);
+     const from = new Date(this.currentFrom);
 
-    if(this.rentedCars.length < 3) {
+     console.log(thisDay);
+     console.log(from);
+     console.log(to);
+
+     if(to < from || to < thisDay || from < thisDay){
+       return false;
+     }
+     else {
+       return true;
+     }
+  }
+  reserveCar = () => {
+ 
+    const theCharge = this.selectedCar == undefined? 0 : this.selectedCar.price * 3;
+
+    if(this.validDates()){
+      this.datesIncorrect = false;
+    
+    } else {
+      this.datesIncorrect = true;
+      return;
+    }
+
+  console.log("here");  
+  console.log(this.currentFrom);
+  console.log(this.currentTo);
+
+  if(this.rentedCars.length < 3) {
       if(this.selectedCar){
         this.selectedCar.available = false;
 
@@ -141,9 +173,7 @@ export class CarReservationComponent implements OnInit {
         ...this.rentedCars
         , this.currentReservation
       ];
-
      } 
-
    }
    else{
      this.maxRentalsReached = true;
