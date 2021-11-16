@@ -98,7 +98,7 @@ dateTo = new FormControl(new Date());
   selectReservation = (r: ReservationDisplay) => {
     this.datesIncorrect = false;
   
-    this.selectedCar = this.cars.filter(x => x.id == r.car.id)[0];
+    this.selectedCar = r.car;
       this.currentReservation = r;
 
       this.resetDatePickers(r.from, r.to);
