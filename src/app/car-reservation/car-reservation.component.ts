@@ -44,6 +44,7 @@ export class CarReservationComponent implements OnInit {
       available:true     
     }))
     this.selectedCar = this.cars[0];
+    const f = this.selectedCar.price;
     const d = new Date();
     this.currentDay = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()
     this.currentTo = this.currentDay;
@@ -54,7 +55,7 @@ export class CarReservationComponent implements OnInit {
     car: {...this.selectedCar},
     from:'',
     to:'',
-    fee:0,
+    fee: f,
     complete:false
 
     }
@@ -90,7 +91,7 @@ dateTo = new FormControl(new Date());
     car: {...this.selectedCar},
     from: this.currentDay,
     to: this.currentDay,
-    fee: 0,
+    fee: this.calculateFee(this.currentTo, this.currentFrom),
     complete: false
     }    
    }
@@ -102,17 +103,28 @@ dateTo = new FormControl(new Date());
       this.currentReservation = r;
 
       this.resetDatePickers(r.from, r.to);
+      
+      
 
   }
   
   toDateChanged = ($event: any) => {
     var d = new Date($event.target.value);
-    this.currentTo = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()     
+    this.currentTo = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()
+    this.updateReservationFee();     
   }
 
   fromDateChanged = ($event: any) => {
     var d = new Date($event.target.value);
-    this.currentFrom = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear()  
+    this.currentFrom = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear() 
+    this.updateReservationFee();
+  }
+
+  updateReservationFee = () => {
+    if(this.currentReservation){
+      this.currentReservation.fee = this.calculateFee(this.currentTo, this.currentFrom);
+      console.log(this.currentReservation.fee);
+    }
   }
 
   validDates = () => {
@@ -129,9 +141,28 @@ dateTo = new FormControl(new Date());
        return true;
      }
   }
+    parseDate(s: any) {
+      console.log(s);
+    var mdy = s.split('/');
+    return new Date(mdy[2], mdy[0]-1, mdy[1]);
+}
+
+    datediff(first: any, second: any) {
+    // Take the difference between the dates and divide by milliseconds per day.
+    // Round to nearest whole number to deal with DST.
+    return Math.round((second-first)/(1000*60*60*24));
+}
+
+calculateFee(first: any, second: any) {
+  
+  if(this.selectedCar){
+    return (this.datediff(this.parseDate(second), this.parseDate(first)) + 1) * this.selectedCar.price;
+  }
+
+  return 0;
+}
+
   reserveCar = () => {
- 
-    const theCharge = this.selectedCar == undefined? 0 : this.selectedCar.price * 3;
 
     if(this.validDates()){
       this.datesIncorrect = false;
@@ -149,7 +180,7 @@ dateTo = new FormControl(new Date());
           car: {...this.selectedCar},
           from: this.currentFrom,
           to: this.currentTo,
-          fee:theCharge,
+          fee:this.calculateFee(this.currentTo, this.currentFrom),
           complete:true     
           }
       }

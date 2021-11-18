@@ -58,7 +58,7 @@
                             </label>
                             <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
                             <mat-datepicker #toPicker></mat-datepicker>
-                        <p>Price: </p>
+                        <p>Price: {{currentReservation.fee}}</p>
                         <div class="alert alert-danger"
                             role="alert"
                             *ngIf="datesIncorrect == true">
